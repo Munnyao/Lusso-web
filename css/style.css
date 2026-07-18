@@ -338,6 +338,18 @@ section {
     transition: border-color 0.3s;
 }
 
+/* New layout lock rule for the locked Vehicle field */
+.input-group select.locked-display {
+    background-color: #eef2f7;      /* Clean background tint to match your text fields */
+    color: var(--brand-dark);       /* Keeps text crisp and perfectly readable */
+    border: 1px solid #cbd5e1;
+    pointer-events: none;           /* Completely blocks dropdown clicks & hover changes */
+    cursor: not-allowed;            /* Visual indicator that it's unchangeable */
+    appearance: none;               /* Removes default native dropdown arrow structure */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
 .input-group select:focus {
     border-color: var(--brand-green);
 }
