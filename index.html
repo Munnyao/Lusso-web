@@ -8,6 +8,49 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* CSS to ensure new element order and custom notes format perfectly */
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            align-items: flex-end;
+        }
+        .custom-note-link {
+            grid-column: 1 / -1;
+            margin-top: 10px;
+            font-size: 0.95rem;
+            color: #d9534f;
+            font-weight: 700;
+        }
+        .custom-note-link a {
+            color: #ff3333;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .btn-book-now {
+            background-color: #25d366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            margin-top: 15px;
+            font-family: 'Montserrat', sans-serif;
+            transition: background 0.3s ease;
+        }
+        .btn-book-now:hover {
+            background-color: #128c7e;
+        }
+        .price-display-box {
+            transition: all 0.3s ease;
+        }
+    </style>
 </head>
 <body>
 
@@ -65,7 +108,7 @@
               <img src="icons/saloon.jfif" alt="Lusso Saloon Car" class="car-img">
                 <div class="car-info">
                     <h3>SALOON</h3>
-                    <button class="btn-price" onclick="togglePriceBox('price-saloon')">Price Range</button>
+                    <button class="btn-price" onclick="togglePriceBox(event, 'price-saloon')">Price Range</button>
                     <div id="price-saloon" class="price-display-box">
                         <div class="price-range-text">KShs. 1,500 – 3,500</div>
                         <div class="price-subtext">Price may vary based on distance</div>
@@ -77,7 +120,7 @@
               <img src="icons/sienta.jfif" alt="Lusso Saloon Car" class="car-img">
                 <div class="car-info">
                     <h3>SIENTA</h3>
-                    <button class="btn-price" onclick="togglePriceBox('price-sienta')">Price Range</button>
+                    <button class="btn-price" onclick="togglePriceBox(event, 'price-sienta')">Price Range</button>
                     <div id="price-sienta" class="price-display-box">
                         <div class="price-range-text">KShs. 2,000 – 4,500</div>
                         <div class="price-subtext">Price may vary based on distance</div>
@@ -89,7 +132,7 @@
               <img src="icons/Noah.jfif" alt="Lusso Saloon Car" class="car-img">
                 <div class="car-info">
                     <h3>NOAH</h3>
-                    <button class="btn-price" onclick="togglePriceBox('price-noah')">Price Range</button>
+                    <button class="btn-price" onclick="togglePriceBox(event, 'price-noah')">Price Range</button>
                     <div id="price-noah" class="price-display-box">
                         <div class="price-range-text">KShs. 3,000 – 5,500</div>
                         <div class="price-subtext">Price may vary based on distance</div>
@@ -101,7 +144,7 @@
               <img src="icons/van.jfif" alt="Lusso Saloon Car" class="car-img">
                 <div class="car-info">
                     <h3>VAN</h3>
-                    <button class="btn-price" onclick="togglePriceBox('price-van')">Price Range</button>
+                    <button class="btn-price" onclick="togglePriceBox(event, 'price-van')">Price Range</button>
                     <div id="price-van" class="price-display-box">
                         <div class="price-range-text">KShs. 4,500 – 9,000</div>
                         <div class="price-subtext">Price may vary based on distance</div>
@@ -113,7 +156,7 @@
               <img src="icons/rosa.jfif" alt="Lusso Saloon Car" class="car-img">
                 <div class="car-info">
                     <h3>ROSA</h3>
-                    <button class="btn-price" onclick="togglePriceBox('price-rosa')">Price Range</button>
+                    <button class="btn-price" onclick="togglePriceBox(event, 'price-rosa')">Price Range</button>
                     <div id="price-rosa" class="price-display-box">
                         <div class="price-range-text">See Our Sample rates for Rosa</div>
                     </div>
@@ -130,30 +173,20 @@
             <p class="subtitle" style="font-size: 0.95rem; color: var(--brand-green); font-weight: 600; margin-bottom: 40px;">Currency: Kenyan Shilling</p>
 
             <!-- CALCULATOR 1: Airport & SGR Transfers -->
-            <div class="calculator-card">
+            <div class="calculator-card" style="margin-bottom: 40px;">
                 <h3>Transfer Calculator</h3>
                 <div class="grid-inputs">
-                    <div class="input-group">
-                        <label for="transfer-vehicle">Select Vehicle</label>
-                        <select id="transfer-vehicle" onchange="onTransferVehicleChange()">
-                            <option value="SALOON">SALOON</option>
-                            <option value="SIENTA">SIENTA</option>
-                            <option value="NOAH">NOAH</option>
-                            <option value="VAN">VAN</option>
-                            <option value="ROSA">ROSA</option>
-                        </select>
-                    </div>
-
+                    <!-- SECTION 1: Pax Input Box -->
                     <div class="input-group">
                         <label for="transfer-pax">Number of People (Pax)</label>
-                        <select id="transfer-pax" onchange="calculateTransferRate()">
-                            <!-- Dynamic Population -->
-                        </select>
+                        <input type="text" id="transfer-pax" placeholder="Type Here" oninput="handlePaxInput('transfer')">
                     </div>
 
+                    <!-- SECTION 2: Destination Select -->
                     <div class="input-group">
                         <label for="transfer-destination">Destination</label>
                         <select id="transfer-destination" onchange="calculateTransferRate()">
+                            <option value="">Select Destination</option>
                             <option value="Nyali">Nyali</option>
                             <option value="Shanzu">Shanzu</option>
                             <option value="Kikambala">Kikambala</option>
@@ -165,20 +198,11 @@
                         </select>
                     </div>
 
+                    <!-- SECTION 3: Select Vehicle -->
                     <div class="input-group">
-                        <label for="transfer-price">Calculated Price (KShs)</label>
-                        <input type="text" id="transfer-price" readonly value="1,500">
-                    </div>
-                </div>
-            </div>
-
-            <!-- CALCULATOR 2: City Tours -->
-            <div class="calculator-card">
-                <h3>City Tours</h3>
-                <div class="grid-inputs">
-                    <div class="input-group">
-                        <label for="tour-vehicle">Select Vehicle</label>
-                        <select id="tour-vehicle" onchange="onTourVehicleChange()">
+                        <label for="transfer-vehicle">Select Vehicle</label>
+                        <select id="transfer-vehicle" onchange="calculateTransferRate()">
+                            <option value="">Select Vehicle</option>
                             <option value="SALOON">SALOON</option>
                             <option value="SIENTA">SIENTA</option>
                             <option value="NOAH">NOAH</option>
@@ -187,20 +211,73 @@
                         </select>
                     </div>
 
+                    <!-- SECTION 4: Calculated Price -->
+                    <div class="input-group">
+                        <label for="transfer-price">Calculated Price (KShs)</label>
+                        <input type="text" id="transfer-price" readonly value="0">
+                    </div>
+
+                    <!-- Custom Link Note Zone -->
+                    <div id="transfer-note" class="custom-note-link" style="display: none;">
+                        For more than 28 people <a href="tel:+254722159272">CALL US</a> for a custom package
+                    </div>
+                </div>
+                
+                <!-- Book Now Linking to WhatsApp Anchor Button -->
+                <a href="https://wa.me/+254722159272" class="btn-book-now" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-brands fa-whatsapp"></i> Book Now
+                </a>
+            </div>
+
+            <!-- CALCULATOR 2: City Tours -->
+            <div class="calculator-card">
+                <h3>City Tours</h3>
+                <div class="grid-inputs">
+                    <!-- SECTION 1: Pax Input Box -->
                     <div class="input-group">
                         <label for="tour-pax">Number of People (Pax)</label>
-                        <select id="tour-pax" onchange="calculateTourRate()">
-                            <!-- Dynamic Population -->
+                        <input type="text" id="tour-pax" placeholder="Type Here" oninput="handlePaxInput('tour')">
+                    </div>
+
+                    <!-- SECTION 2: Destination Placeholder to align layouts exactly -->
+                    <div class="input-group">
+                        <label for="tour-destination">Destination</label>
+                        <select id="tour-destination" disabled>
+                            <option value="Mombasa City Tour">Mombasa City Tour</option>
                         </select>
                     </div>
 
+                    <!-- SECTION 3: Select Vehicle -->
+                    <div class="input-group">
+                        <label for="tour-vehicle">Select Vehicle</label>
+                        <select id="tour-vehicle" onchange="calculateTourRate()">
+                            <option value="">Select Vehicle</option>
+                            <option value="SALOON">SALOON</option>
+                            <option value="SIENTA">SIENTA</option>
+                            <option value="NOAH">NOAH</option>
+                            <option value="VAN">VAN</option>
+                            <option value="ROSA">ROSA</option>
+                        </select>
+                    </div>
+
+                    <!-- SECTION 4: Calculated Price -->
                     <div class="input-group">
                         <label for="tour-price">Calculated Price (KShs)</label>
-                        <input type="text" id="tour-price" readonly value="5,000">
+                        <input type="text" id="tour-price" readonly value="0">
+                    </div>
+
+                    <!-- Custom Link Note Zone -->
+                    <div id="tour-note" class="custom-note-link" style="display: none;">
+                        For more than 28 people <a href="tel:+254722159272">CALL US</a> for a custom package
                     </div>
                 </div>
 
-                <div class="rate-note">
+                <!-- Book Now Linking to WhatsApp Anchor Button -->
+                <a href="https://wa.me/+254722159272" class="btn-book-now" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-brands fa-whatsapp"></i> Book Now
+                </a>
+
+                <div class="rate-note" style="margin-top: 20px;">
                     <i class="fa-solid fa-circle-info"></i> Note: Diani and Malindi Airstrip Rates : 1,500 – 6,000 based on distance
                 </div>
             </div>
@@ -213,7 +290,6 @@
         <p class="subtitle">Trusted by leading operations and hospitality firms</p>
         
         <div class="partners-grid">
-            <!-- Generated 10 partner cards cleanly -->
             <div class="partner-card"><img src="icons/Premier logo.jfif" alt="Partner 1 Logo" class="partner-logo"><p>Premier Grand Tour &amp; Travels</p></div>
             <div class="partner-card"><img src="icons/Braverly Holidays.png" alt="Partner 2 Logo" class="partner-logo"><p>Braverly Holidays</p></div>
             <div class="partner-card"><img src="icons/Blue Lilac.png" alt="Partner 3 Logo" class="partner-logo"><p>Blue Lilac Tour &amp; Travel</p></div>
@@ -239,8 +315,8 @@
             <a href="mailto:lussotransferservices@gmail.com" class="btn-action btn-email">
                 <i class="fa-solid fa-envelope"></i> Email Us</a>
 
-                <a href="https://wa.me/+254722159272" class="btn-action btn-whatsapp">
-                  <i class="fa-brands fa-whatsapp"></i> Whatsapp</a>
+            <a href="https://wa.me/+254722159272" class="btn-action btn-whatsapp">
+                <i class="fa-brands fa-whatsapp"></i> Whatsapp</a>
         </div>
 
         <div class="socials-container">
@@ -260,119 +336,204 @@
 
     <!-- INTERACTIVE LOGIC JAVASCRIPT -->
     <script>
-        // Toggle the visual display of the hidden simple details boxes for vehicle range
-        function togglePriceBox(boxId) {
+        // Global variables to trace active timeouts for price boxes
+        let priceBoxTimeouts = {};
+
+        // Toggle handling with auto-closing timing mechanism
+        function togglePriceBox(event, boxId) {
+            event.stopPropagation(); // Avoid instant closing from window click events
+            
+            // Close any other open price displays first
+            let boxes = document.querySelectorAll('.price-display-box');
+            boxes.forEach(b => {
+                if(b.id !== boxId) b.style.display = "none";
+            });
+
             var box = document.getElementById(boxId);
+            
             if (box.style.display === "block") {
                 box.style.display = "none";
+                if(priceBoxTimeouts[boxId]) clearTimeout(priceBoxTimeouts[boxId]);
             } else {
                 box.style.display = "block";
+                
+                // Clear old tracking timeout if present
+                if(priceBoxTimeouts[boxId]) clearTimeout(priceBoxTimeouts[boxId]);
+                
+                // Set automatic closer window (5000 milliseconds = 5 seconds)
+                priceBoxTimeouts[boxId] = setTimeout(function() {
+                    box.style.display = "none";
+                }, 5000);
             }
         }
 
-        // Pricing Matrix definitions matching conditions perfectly
-        const transferRates = {
-            'SALOON': {
-                pax: ['3pax'],
-                rates: { 'Nyali': 1500, 'Shanzu': 2000, 'Kikambala': 3500, 'Kilifi': 5000, 'Watamu': 8000, 'Malindi': 9000, 'Diani': 4500, 'Wasini': 8000 }
-            },
-            'SIENTA': {
-                pax: ['5pax'],
-                rates: { 'Nyali': 2000, 'Shanzu': 2500, 'Kikambala': 4500, 'Kilifi': 6000, 'Watamu': 9000, 'Malindi': 10000, 'Diani': 5500, 'Wasini': 10000 }
-            },
-            'NOAH': {
-                pax: ['6pax'],
-                rates: { 'Nyali': 3000, 'Shanzu': 3500, 'Kikambala': 5500, 'Kilifi': 7000, 'Watamu': 10000, 'Malindi': 12000, 'Diani': 6500, 'Wasini': 12000 }
-            },
-            'VAN': {
-                pax: ['10pax', '16pax'],
-                rates: {
-                    '10pax': { 'Nyali': 4500, 'Shanzu': 5000, 'Kikambala': 9000, 'Kilifi': 10000, 'Watamu': 13000, 'Malindi': 14000, 'Diani': 9000, 'Wasini': 13000 },
-                    '16pax': { 'Nyali': 5500, 'Shanzu': 6000, 'Kikambala': 11000, 'Kilifi': 12000, 'Watamu': 15000, 'Malindi': 16000, 'Diani': 11000, 'Wasini': 16000 }
-                }
-            },
-            'ROSA': {
-                pax: ['22pax', '28pax'],
-                rates: {
-                    '22pax': { 'Nyali': 8000, 'Shanzu': 9000, 'Kikambala': 12000, 'Kilifi': 18000, 'Watamu': 25000, 'Malindi': 28000, 'Diani': 18000, 'Wasini': 28000 },
-                    '28pax': { 'Nyali': 9000, 'Shanzu': 1000, 'Kikambala': 14000, 'Kilifi': 20000, 'Watamu': 27000, 'Malindi': 30000, 'Diani': 20000, 'Wasini': 30000 }
-                }
+        // Close display cards if user scrolls anywhere away on screen
+        window.addEventListener('scroll', function() {
+            let boxes = document.querySelectorAll('.price-display-box');
+            boxes.forEach(box => {
+                box.style.display = "none";
+            });
+            // Flush all active tracking timeouts safely
+            for (let id in priceBoxTimeouts) {
+                clearTimeout(priceBoxTimeouts[id]);
             }
+            priceBoxTimeouts = {};
+        });
+
+        // Pricing Matrix configuration maps
+        const transferRates = {
+            'SALOON': { 'Nyali': 1500, 'Shanzu': 2000, 'Kikambala': 3500, 'Kilifi': 5000, 'Watamu': 8000, 'Malindi': 9000, 'Diani': 4500, 'Wasini': 8000 },
+            'SIENTA': { 'Nyali': 2000, 'Shanzu': 2500, 'Kikambala': 4500, 'Kilifi': 6000, 'Watamu': 9000, 'Malindi': 10000, 'Diani': 5500, 'Wasini': 10000 },
+            'NOAH':   { 'Nyali': 3000, 'Shanzu': 3500, 'Kikambala': 5500, 'Kilifi': 7000, 'Watamu': 10000, 'Malindi': 12000, 'Diani': 6500, 'Wasini': 12000 },
+            'VAN10':  { 'Nyali': 4500, 'Shanzu': 5000, 'Kikambala': 9000, 'Kilifi': 10000, 'Watamu': 13000, 'Malindi': 14000, 'Diani': 9000, 'Wasini': 13000 },
+            'VAN16':  { 'Nyali': 5500, 'Shanzu': 6000, 'Kikambala': 11000, 'Kilifi': 12000, 'Watamu': 15000, 'Malindi': 16000, 'Diani': 11000, 'Wasini': 16000 },
+            'ROSA22': { 'Nyali': 8000, 'Shanzu': 9000, 'Kikambala': 12000, 'Kilifi': 18000, 'Watamu': 25000, 'Malindi': 28000, 'Diani': 18000, 'Wasini': 28000 },
+            'ROSA28': { 'Nyali': 9000, 'Shanzu': 1000, 'Kikambala': 14000, 'Kilifi': 20000, 'Watamu': 27000, 'Malindi': 30000, 'Diani': 20000, 'Wasini': 30000 }
         };
 
         const tourRates = {
-            'SALOON': { pax: ['3pax'], price: { '3pax': 5000 } },
-            'SIENTA': { pax: ['5pax'], price: { '5pax': 7000 } },
-            'NOAH': { pax: ['6pax'], price: { '6pax': 10000 } },
-            'VAN': { pax: ['10pax', '16pax'], price: { '10pax': 12000, '16pax': 14000 } },
-            'ROSA': { pax: ['22pax', '28pax'], price: { '22pax': 17000, '28pax': 19000 } } // Handled input assignment mapping safely
+            'SALOON': 5000,
+            'SIENTA': 7000,
+            'NOAH':   10000,
+            'VAN10':  12000,
+            'VAN16':  14000,
+            'ROSA22': 17000,
+            'ROSA28': 19000
         };
 
-        // Transfer logic execution handler
-        function onTransferVehicleChange() {
-            const vehicle = document.getElementById('transfer-vehicle').value;
-            const paxSelect = document.getElementById('transfer-pax');
+        // Unified live handler processing character evaluations and conditional updates
+        function handlePaxInput(prefix) {
+            const paxInput = document.getElementById(prefix + '-pax');
+            const vehicleSelect = document.getElementById(prefix + '-vehicle');
+            const priceInput = document.getElementById(prefix + '-price');
+            const noteDiv = document.getElementById(prefix + '-note');
             
-            paxSelect.innerHTML = '';
-            transferRates[vehicle].pax.forEach(pax => {
-                let opt = document.createElement('option');
-                opt.value = pax;
-                opt.innerText = pax;
-                paxSelect.appendChild(opt);
-            });
-
-            calculateTransferRate();
-        }
-
-        function calculateTransferRate() {
-            const vehicle = document.getElementById('transfer-vehicle').value;
-            const pax = document.getElementById('transfer-pax').value;
-            const destination = document.getElementById('transfer-destination').value;
-            const priceInput = document.getElementById('transfer-price');
-
-            if(!vehicle || !pax || !destination) return;
-
-            let price = 0;
-            if (vehicle === 'SALOON' || vehicle === 'SIENTA' || vehicle === 'NOAH') {
-                price = transferRates[vehicle].rates[destination];
-            } else {
-                price = transferRates[vehicle].rates[pax][destination];
+            let rawVal = paxInput.value.replace(/[^0-9]/g, ''); // Enforce only integers
+            
+            // Scrub and ignore single or leading zeroes automatically
+            if (rawVal.startsWith('0')) {
+                rawVal = rawVal.replace(/^0+/, '');
+            }
+            
+            paxInput.value = rawVal;
+            
+            if (rawVal === "") {
+                vehicleSelect.value = "";
+                priceInput.value = "0";
+                noteDiv.style.display = "none";
+                return;
+            }
+            
+            const paxCount = parseInt(rawVal, 10);
+            
+            // Direct conditional evaluations linking vehicle fields automatically
+            if (paxCount >= 1 && paxCount <= 3) {
+                vehicleSelect.value = "SALOON";
+                noteDiv.style.display = "none";
+            } else if (paxCount === 4 || paxCount === 5) {
+                vehicleSelect.value = "SIENTA";
+                noteDiv.style.display = "none";
+            } else if (paxCount === 6) {
+                vehicleSelect.value = "NOAH";
+                noteDiv.style.display = "none";
+            } else if (paxCount >= 7 && paxCount <= 10) {
+                vehicleSelect.value = "VAN"; // Maps to 10pax matrix calculations internally
+                noteDiv.style.display = "none";
+            } else if (paxCount >= 11 && paxCount <= 16) {
+                vehicleSelect.value = "VAN"; // Maps to 16pax matrix calculations internally
+                noteDiv.style.display = "none";
+            } else if (paxCount >= 17 && paxCount <= 22) {
+                vehicleSelect.value = "ROSA"; // Maps to 22pax matrix calculations internally
+                noteDiv.style.display = "none";
+            } else if (paxCount >= 23 && paxCount <= 28) {
+                vehicleSelect.value = "ROSA"; // Maps to 28pax matrix calculations internally
+                noteDiv.style.display = "none";
+            } else if (paxCount > 28) {
+                vehicleSelect.value = "";
+                priceInput.value = "0";
+                noteDiv.style.display = "block"; // Activates dynamic call trigger link
+                return;
             }
 
+            // Run updates to ensure instant response triggers
+            if (prefix === 'transfer') {
+                calculateTransferRate();
+            } else {
+                calculateTourRate();
+            }
+        }
+
+        // Deep mapping evaluation rules for Airport & SGR Transfers
+        function calculateTransferRate() {
+            const paxInput = document.getElementById('transfer-pax').value;
+            const destination = document.getElementById('transfer-destination').value;
+            const vehicleSelect = document.getElementById('transfer-vehicle');
+            const priceInput = document.getElementById('transfer-price');
+
+            if (paxInput === "" || !destination) {
+                priceInput.value = "0";
+                return;
+            }
+
+            const paxCount = parseInt(paxInput, 10);
+            let activeKey = vehicleSelect.value;
+
+            // Pinpoint precise vehicle sub-variants internally based on structural criteria
+            if (activeKey === 'VAN') {
+                activeKey = (paxCount <= 10) ? 'VAN10' : 'VAN16';
+            } else if (activeKey === 'ROSA') {
+                activeKey = (paxCount <= 22) ? 'ROSA22' : 'ROSA28';
+            }
+
+            if (!transferRates[activeKey] || !transferRates[activeKey][destination]) {
+                priceInput.value = "0";
+                return;
+            }
+
+            let price = transferRates[activeKey][destination];
             priceInput.value = Number(price).toLocaleString();
         }
 
-        // City Tour dynamic layout updates
-        function onTourVehicleChange() {
-            const vehicle = document.getElementById('tour-vehicle').value;
-            const paxSelect = document.getElementById('tour-pax');
-            
-            paxSelect.innerHTML = '';
-            tourRates[vehicle].pax.forEach(pax => {
-                let opt = document.createElement('option');
-                opt.value = pax;
-                opt.innerText = pax;
-                paxSelect.appendChild(opt);
-            });
-
-            calculateTourRate();
-        }
-
+        // Deep mapping evaluation rules for City Tours
         function calculateTourRate() {
-            const vehicle = document.getElementById('tour-vehicle').value;
-            const pax = document.getElementById('tour-pax').value;
+            const paxInput = document.getElementById('tour-pax').value;
+            const vehicleSelect = document.getElementById('tour-vehicle');
             const priceInput = document.getElementById('tour-price');
 
-            if(!vehicle || !pax) return;
+            if (paxInput === "") {
+                priceInput.value = "0";
+                return;
+            }
 
-            let price = tourRates[vehicle].price[pax];
+            const paxCount = parseInt(paxInput, 10);
+            let activeKey = vehicleSelect.value;
+
+            if (!activeKey) {
+                priceInput.value = "0";
+                return;
+            }
+
+            // Pinpoint precise vehicle sub-variants internally based on structural criteria
+            if (activeKey === 'VAN') {
+                activeKey = (paxCount <= 10) ? 'VAN10' : 'VAN16';
+            } else if (activeKey === 'ROSA') {
+                activeKey = (paxCount <= 22) ? 'ROSA22' : 'ROSA28';
+            }
+
+            let price = tourRates[activeKey] || 0;
             priceInput.value = Number(price).toLocaleString();
         }
 
-        // Initialize calculators on window rendering
+        // Clear dynamic defaults on window load
         window.onload = function() {
-            onTransferVehicleChange();
-            onTourVehicleChange();
+            document.getElementById('transfer-pax').value = "";
+            document.getElementById('transfer-destination').value = "";
+            document.getElementById('transfer-vehicle').value = "";
+            document.getElementById('transfer-price').value = "0";
+
+            document.getElementById('tour-pax').value = "";
+            document.getElementById('tour-vehicle').value = "";
+            document.getElementById('tour-price').value = "0";
         };
     </script>
 </body>
