@@ -515,9 +515,6 @@ section {
     transform: translateY(-2px);
     opacity: 0.95;
 }
-.btn-call::after{
-   content: attr(data-phone);
-}
 
 /* --- FOOTER --- */
 footer {
